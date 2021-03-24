@@ -20,7 +20,7 @@ echo 'xhdtlsqhdks1' | sudo -kS yum -y install nodejs
 
 # git clone server setting forder (1,2,3)]
 cd ~
-cd /home/atcs03/centerservercicd/server1
+cd /home/atcs03/centerservercicd/server3
 npm install dotenv
 node app_make.cfg.js
 #########################################
@@ -38,7 +38,7 @@ echo 'xhdtlsqhdks1' | sudo -kS mkdir -p /data/zookeeper
 echo 'xhdtlsqhdks1' | sudo -kS chown -R atcs03:atcs03 /data
 echo 1 > /data/zookeeper/myid 
 # [zoo.cfg] file setting
-\cp /home/atcs03/centerservercicd/server1/zoo.cfg /home/atcs03/app/zookeeper/conf/zoo.cfg
+\cp /home/atcs03/centerservercicd/server3/zoo.cfg /home/atcs03/app/zookeeper/conf/zoo.cfg
 
 # zookeeper server firewall setting
 echo 'xhdtlsqhdks1' | sudo -kS firewall-cmd --permanent --zone=public --add-port=2181/tcp 
@@ -48,7 +48,7 @@ echo 'xhdtlsqhdks1' | sudo -kS firewall-cmd --reload
 
 
 # [zookeeper-server.service] file setting
-echo 'xhdtlsqhdks1' | sudo -kS cp /home/atcs03/centerservercicd/server1/zookeeper-server.service /usr/lib/systemd/system/zookeeper-server.service
+echo 'xhdtlsqhdks1' | sudo -kS cp /home/atcs03/centerservercicd/server3/zookeeper-server.service /usr/lib/systemd/system/zookeeper-server.service
 
 
 
@@ -67,16 +67,16 @@ echo 1 > /data/kafka/myid
 
 
 # [server.properties] file setting
-\cp /home/atcs03/centerservercicd/server1/server.properties /home/atcs03/app/kafka/config/server.properties
+\cp /home/atcs03/centerservercicd/server3/server.properties /home/atcs03/app/kafka/config/server.properties
 # [zookeeper.properties] file setting
-\cp /home/atcs03/centerservercicd/server1/zookeeper.properties /home/atcs03/app/kafka/config/zookeeper.properties
+\cp /home/atcs03/centerservercicd/server3/zookeeper.properties /home/atcs03/app/kafka/config/zookeeper.properties
 # kafka server firewall setting 
 echo 'xhdtlsqhdks1' | sudo -kS firewall-cmd --permanent --zone=public --add-port=9092/tcp
 echo 'xhdtlsqhdks1' | sudo -kS firewall-cmd --reload
 
 
 # [kafka-server.service] file setting 
-echo 'xhdtlsqhdks1' | sudo -kS cp /home/atcs03/centerservercicd/server1/kafka-server.service /usr/lib/systemd/system/kafka-server.service
+echo 'xhdtlsqhdks1' | sudo -kS cp /home/atcs03/centerservercicd/server3/kafka-server.service /usr/lib/systemd/system/kafka-server.service
 echo 'xhdtlsqhdks1' | sudo -kS systemctl daemon-reload
 echo 'xhdtlsqhdks1' | sudo -kS systemctl enable kafka-server.service
 echo 'xhdtlsqhdks1' | sudo -kS systemctl stop kafka-server.service
