@@ -32,14 +32,14 @@ Description=zookeeper-server
 After=network.target 
 [Service] 
 Type=forking 
-User=${server1_user}
-Group=${server1_user}
+User=${server3_user}
+Group=${server3_user}
 SyslogIdentifier=zookeeper-server 
-WorkingDirectory=/home/${server1_user}/app/zookeeper
+WorkingDirectory=/home/${server3_user}/app/zookeeper
 Restart=always 
 RestartSec=0s
-ExecStart=/home/${server1_user}/app/zookeeper/bin/zkServer.sh start
-ExecStop=/home/${server1_user}/app/zookeeper/bin/zkServer.sh stop 
+ExecStart=/home/${server3_user}/app/zookeeper/bin/zkServer.sh start
+ExecStop=/home/${server3_user}/app/zookeeper/bin/zkServer.sh stop 
 [Install] 
 WantedBy=multi-user.target
 `;
@@ -50,8 +50,8 @@ fs.writeFile(url+zookeeper_server_service_fileName,zookeeper_server_service_data
 //////////////////////////////////////////////////////////////////////////////////
 var server_properties_fileName='server.properties';
 var server_properties_encoding = 'utf8';
-var server_properties_data = `broker.id=1
-advertised.listeners=PLAINTEXT://${server1_ip}:9092
+var server_properties_data = `broker.id=3
+advertised.listeners=PLAINTEXT://${server3_ip}:9092
 num.network.threads=3
 num.io.threads=8
 socket.send.buffer.bytes=102400
@@ -103,14 +103,14 @@ Description=kafka-server
 After=network.target
 [Service]
 Type=simple
-User=${server1_user}
-Group=${server1_user}
+User=${server3_user}
+Group=${server3_user}
 SyslogIdentifier=kafka-server
-WorkingDirectory=/home/${server1_user}/app/kafka
+WorkingDirectory=/home/${server3_user}/app/kafka
 Restart=no
 RestartSec=0s
-ExecStart=/home/${server1_user}/app/kafka/bin/kafka-server-start.sh /home/${server1_user}/app/kafka/config/server.properties
-ExecStop=/home/${server1_user}/app/kafka/bin/kafka-server-stop.sh
+ExecStart=/home/${server3_user}/app/kafka/bin/kafka-server-start.sh /home/${server3_user}/app/kafka/config/server.properties
+ExecStop=/home/${server3_user}/app/kafka/bin/kafka-server-stop.sh
 [Install]
 WantedBy=multi-user.target
 `;
