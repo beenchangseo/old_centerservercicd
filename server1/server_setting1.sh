@@ -13,14 +13,14 @@ echo 'xhdtlsqhdks1' | sudo -kS make
 echo 'xhdtlsqhdks1' | sudo -kS make install
 
 # python3.8 module isntall #
-pip3 install --upgrade pip
-pip3 install kafka-python
-pip3 install sysv_ipc
-pip3 install pymysql
-pip3 install sockets
-pip3 install python-socketio
-pip3 install serial
-pip3 install aiohttp
+# echo 'xhdtlsqhdks1' | sudo -kS pip3 install --upgrade pip
+# echo 'xhdtlsqhdks1' | sudo -kS pip3 install kafka-python
+# echo 'xhdtlsqhdks1' | sudo -kS pip3 install sysv_ipc
+# echo 'xhdtlsqhdks1' | sudo -kS pip3 install pymysql
+# echo 'xhdtlsqhdks1' | sudo -kS pip3 install sockets
+# echo 'xhdtlsqhdks1' | sudo -kS pip3 install python-socketio
+# echo 'xhdtlsqhdks1' | sudo -kS pip3 install serial
+# echo 'xhdtlsqhdks1' | sudo -kS pip3 install aiohttp
 
 # nodejs 12.x version install #
 cd ~
@@ -29,16 +29,15 @@ echo 'xhdtlsqhdks1' | sudo -kS yum -y install nodejs
 
 # git clone server setting forder (1,2,3)]
 cd ~
-git clone URL
-cd server1
-npm install
+cd /home/atcs01/centerservercicd/server1
+npm install dotenv
 node app_make.cfg.js
 #########################################
 
 
 # zookeeper server install & setting #
 cd ~
-echo 'xhdtlsqhdks1' | sudo -kS yum -y install java-1.8.0-openjdk
+echo 'xhdtlsqhdks   1' | sudo -kS yum -y install java-1.8.0-openjdk
 mkdir /home/atcs01/app
 cd /home/atcs01/app
 wget https://archive.apache.org/dist/zookeeper/zookeeper-3.4.14/zookeeper-3.4.14.tar.gz
