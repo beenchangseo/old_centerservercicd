@@ -36,7 +36,7 @@ tar zxf zookeeper-3.4.14.tar.gz
 ln -s zookeeper-3.4.14 zookeeper
 echo 'xhdtlsqhdks1' | sudo -kS mkdir -p /data/zookeeper
 echo 'xhdtlsqhdks1' | sudo -kS chown -R atcs03:atcs03 /data
-echo 1 > /data/zookeeper/myid 
+echo 3 > /data/zookeeper/myid 
 # [zoo.cfg] file setting
 \cp /home/atcs03/centerservercicd/server3/zoo.cfg /home/atcs03/app/zookeeper/conf/zoo.cfg
 
@@ -63,7 +63,7 @@ ln -s kafka_2.11-1.0.0 kafka
 echo 'xhdtlsqhdks1' | sudo -kS mkdir -p /data/kafka
 echo 'xhdtlsqhdks1' | sudo -kS mkdir -p /data/kafka/data1
 echo 'xhdtlsqhdks1' | sudo -kS chown -R atcs03:atcs03 /data
-echo 1 > /data/kafka/myid
+echo 3 > /data/kafka/myid
 
 
 # [server.properties] file setting
