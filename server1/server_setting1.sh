@@ -15,7 +15,8 @@ echo 'xhdtlsqhdks1' | sudo -kS make install
 
 # nodejs 12.x version install #
 cd ~
-echo 'xhdtlsqhdks1' | curl -sL https://rpm.nodesource.com/setup_12.x | sudo -E bash -
+curl -sL https://rpm.nodesource.com/setup_12.x
+echo 'xhdtlsqhdks1' | sudo -E bash -
 echo 'xhdtlsqhdks1' | sudo -kS yum -y install nodejs
 
 # git clone server setting forder (1,2,3)]
