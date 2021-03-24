@@ -96,7 +96,7 @@ fs.writeFile(url+zookeeper_properties_fileName,zookeeper_properties_data,zookeep
       else console.log("쓰기완료");
 });
 //////////////////////////////////////////////////////////////////////////////////
-var kafka_server_service_fileName='zookeeper-server.service';
+var kafka_server_service_fileName='kafka-server.service';
 var kafka_server_service_encoding = 'utf8';
 var kafka_server_service_data = `[Unit]
 Description=kafka-server

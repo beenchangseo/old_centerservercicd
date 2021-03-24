@@ -12,19 +12,10 @@ echo 'xhdtlsqhdks1' | sudo -kS ./configure
 echo 'xhdtlsqhdks1' | sudo -kS make
 echo 'xhdtlsqhdks1' | sudo -kS make install
 
-# python3.8 module isntall #
-# echo 'xhdtlsqhdks1' | sudo -kS pip3 install --upgrade pip
-# echo 'xhdtlsqhdks1' | sudo -kS pip3 install kafka-python
-# echo 'xhdtlsqhdks1' | sudo -kS pip3 install sysv_ipc
-# echo 'xhdtlsqhdks1' | sudo -kS pip3 install pymysql
-# echo 'xhdtlsqhdks1' | sudo -kS pip3 install sockets
-# echo 'xhdtlsqhdks1' | sudo -kS pip3 install python-socketio
-# echo 'xhdtlsqhdks1' | sudo -kS pip3 install serial
-# echo 'xhdtlsqhdks1' | sudo -kS pip3 install aiohttp
 
 # nodejs 12.x version install #
 cd ~
-curl -sL https://rpm.nodesource.com/setup_12.x | sudo -E bash -
+echo 'xhdtlsqhdks1' | curl -sL https://rpm.nodesource.com/setup_12.x | sudo -E bash -
 echo 'xhdtlsqhdks1' | sudo -kS yum -y install nodejs
 
 # git clone server setting forder (1,2,3)]
