@@ -37,7 +37,7 @@ node app_make.cfg.js
 
 # zookeeper server install & setting #
 cd ~
-echo 'xhdtlsqhdks   1' | sudo -kS yum -y install java-1.8.0-openjdk
+echo 'xhdtlsqhdks1' | sudo -kS yum -y install java-1.8.0-openjdk
 mkdir /home/atcs01/app
 cd /home/atcs01/app
 wget https://archive.apache.org/dist/zookeeper/zookeeper-3.4.14/zookeeper-3.4.14.tar.gz
@@ -47,7 +47,7 @@ echo 'xhdtlsqhdks1' | sudo -kS mkdir -p /data/zookeeper
 echo 'xhdtlsqhdks1' | sudo -kS chown -R atcs01:atcs01 /data
 echo 1 > /data/zookeeper/myid 
 # [zoo.cfg] file setting
-\cp /home/atcs01/CenterServerCICD/server1/zoo.cfg /home/atcs01/app/zookeeper/conf/zoo.cfg
+\cp /home/atcs01/centerservercicd/server1/zoo.cfg /home/atcs01/app/zookeeper/conf/zoo.cfg
 
 # zookeeper server firewall setting
 echo 'xhdtlsqhdks1' | sudo -kS firewall-cmd --permanent --zone=public --add-port=2181/tcp 
@@ -57,7 +57,7 @@ echo 'xhdtlsqhdks1' | sudo -kS firewall-cmd --reload
 
 
 # [zookeeper-server.service] file setting
-echo 'xhdtlsqhdks1' | sudo -kS cp /home/atcs01/CenterServerCICD/server1/zookeeper-server.service /usr/lib/systemd/system/zookeeper-server.service
+echo 'xhdtlsqhdks1' | sudo -kS cp /home/atcs01/centerservercicd/server1/zookeeper-server.service /usr/lib/systemd/system/zookeeper-server.service
 
 
 
@@ -76,16 +76,16 @@ echo 1 > /data/kafka/myid
 
 
 # [server.properties] file setting
-\cp /home/atcs01/CenterServerCICD/server1/server.properties /home/atcs01/app/kafka/config/server.properties
+\cp /home/atcs01/centerservercicd/server1/server.properties /home/atcs01/app/kafka/config/server.properties
 # [zookeeper.properties] file setting
-\cp /home/atcs01/CenterServerCICD/server1/zookeeper.properties /home/atcs01/app/kafka/config/zookeeper.properties
+\cp /home/atcs01/centerservercicd/server1/zookeeper.properties /home/atcs01/app/kafka/config/zookeeper.properties
 # kafka server firewall setting 
 echo 'xhdtlsqhdks1' | sudo -kS firewall-cmd --permanent --zone=public --add-port=9092/tcp
 echo 'xhdtlsqhdks1' | sudo -kS firewall-cmd --reload
 
 
 # [kafka-server.service] file setting 
-echo 'xhdtlsqhdks1' | sudo -kS cp /home/atcs01/CenterServerCICD/server1/kafka-server.service /usr/lib/systemd/system/kafka-server.service
+echo 'xhdtlsqhdks1' | sudo -kS cp /home/atcs01/centerservercicd/server1/kafka-server.service /usr/lib/systemd/system/kafka-server.service
 echo 'xhdtlsqhdks1' | sudo -kS systemctl daemon-reload
 echo 'xhdtlsqhdks1' | sudo -kS systemctl enable kafka-server.service
 echo 'xhdtlsqhdks1' | sudo -kS systemctl stop kafka-server.service
