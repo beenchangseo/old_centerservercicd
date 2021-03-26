@@ -154,11 +154,11 @@ def make_txmsg(lcid, host_memory):
         sndmsg.append(gen_lrc(sndmsg))
         hex_dump("[lcid = %d] control_cmd -->" %lcid, sndmsg)
     else:
-        sndmsg = [0x7e, 0x7e, 4, lcid % 16, 0x12, 4 ^ (lcid % 16) ^ 0x12,
-                  0x7e, 0x7e, 4, lcid % 16, 0x42, 4 ^ (lcid % 16) ^ 0x42]
-        # opcode = (opcode + 1) & 1
-        # if opcode == 0: sndmsg = [0x7e, 0x7e, 4, lcid % 16, 0x12]
-        # else:           sndmsg = [0x7e, 0x7e, 4, lcid % 16, 0x42]
+        # sndmsg = [0x7e, 0x7e, 4, lcid % 16, 0x12, 4 ^ (lcid % 16) ^ 0x12,
+        #           0x7e, 0x7e, 4, lcid % 16, 0x42, 4 ^ (lcid % 16) ^ 0x42]
+        opcode = (opcode + 1) & 1
+        if opcode == 0: sndmsg = [0x7e, 0x7e, 4, lcid % 16, 0x12]
+        else:           sndmsg = [0x7e, 0x7e, 4, lcid % 16, 0x42]
         sndmsg.append(gen_lrc(sndmsg))
 
     return sndmsg
