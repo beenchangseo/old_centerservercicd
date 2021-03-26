@@ -46,7 +46,7 @@ mysql -uroot -pxhdtlsqhdks1 < create_root_auth.sql
 echo 'xhdtlsqhdks1' | sudo -kS systemctl stop mariadb
 
 # sudo nano /etc/my.cnf.d/server.cnf
-\cp /home/atcs02/centerservercicd/server1/server.cnf /etc/my.cnf.d/server.cnf
+\cp /home/atcs02/centerservercicd/server2/server.cnf /etc/my.cnf.d/server.cnf
 
 # [server]
 
