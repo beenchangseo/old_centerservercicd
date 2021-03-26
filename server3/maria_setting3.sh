@@ -8,11 +8,18 @@
 # ********************************************
 
 # sudo nano /etc/yum.repos.d/MariaDB.repo
-echo 'xhdtlsqhdks1' | sudo -kS echo "[mariadb]"  >  /etc/yum.repos.d/MariaDB.repo
-echo 'xhdtlsqhdks1' | sudo -kS echo "name = MariaDB" >> /etc/yum.repos.d/MariaDB.repo
-echo 'xhdtlsqhdks1' | sudo -kS echo "baseurl = http://yum.mariadb.org/10.5/centos74-amd64"  >> /etc/yum.repos.d/MariaDB.repo
-echo 'xhdtlsqhdks1' | sudo -kS echo "gpgkey=https://yum.mariadb.org/RPM-GPG-KEY-MariaDB"  >> /etc/yum.repos.d/MariaDB.repo
-echo 'xhdtlsqhdks1' | sudo -kS echo "gpgcheck=1"  >> /etc/yum.repos.d/MariaDB.repo
+# echo 'xhdtlsqhdks1' | sudo -kS echo "[mariadb]"  >  /etc/yum.repos.d/MariaDB.repo
+# echo 'xhdtlsqhdks1' | sudo -kS echo "name = MariaDB" >> /etc/yum.repos.d/MariaDB.repo
+# echo 'xhdtlsqhdks1' | sudo -kS echo "baseurl = http://yum.mariadb.org/10.5/centos74-amd64"  >> /etc/yum.repos.d/MariaDB.repo
+# echo 'xhdtlsqhdks1' | sudo -kS echo "gpgkey=https://yum.mariadb.org/RPM-GPG-KEY-MariaDB"  >> /etc/yum.repos.d/MariaDB.repo
+# echo 'xhdtlsqhdks1' | sudo -kS echo "gpgcheck=1"  >> /etc/yum.repos.d/MariaDB.repo
+
+echo "[mariadb]"  >  /etc/yum.repos.d/MariaDB.repo
+echo "name = MariaDB" >> /etc/yum.repos.d/MariaDB.repo
+echo "baseurl = http://yum.mariadb.org/10.5/centos74-amd64"  >> /etc/yum.repos.d/MariaDB.repo
+echo "gpgkey=https://yum.mariadb.org/RPM-GPG-KEY-MariaDB"  >> /etc/yum.repos.d/MariaDB.repo
+echo "gpgcheck=1"  >> /etc/yum.repos.d/MariaDB.repo
+
 # [mariadb]
 # name = MariaDB
 # baseurl = http://yum.mariadb.org/10.5/centos74-amd64
@@ -22,7 +29,7 @@ echo 'xhdtlsqhdks1' | sudo -kS echo "gpgcheck=1"  >> /etc/yum.repos.d/MariaDB.re
 echo 'xhdtlsqhdks1' | sudo -kS yum -y install MariaDB
 # rpm -qa | grep MariaDB
 echo 'xhdtlsqhdks1' | sudo -kS systemctl start mariadb
-/usr/bin/mysqladmin -u root password 'xhdtlsqhdks1'    ----> 루트 비밀번호 셋팅
+/usr/bin/mysqladmin -u root password 'xhdtlsqhdks1'
 echo 'xhdtlsqhdks1' | sudo -kS systemctl enable mariadb
 
 
@@ -30,16 +37,16 @@ mysql -uroot -pxhdtlsqhdks1 < create_root_auth.sql
 
 # <mysql create_root_auth.sql>
 # mysql -u root -p
-# create user 'atcs01'@'%' identified by 'xhdtlsqhdks1';
-# grant all privileges on tcs_database.* to 'atcs01'@'%';
+# create user 'atcs03'@'%' identified by 'xhdtlsqhdks1';
+# grant all privileges on tcs_database.* to 'atcs03'@'%';
 # grant all privileges on *.* to 'root'@'%' identified by 'xhdtlsqhdks1';
 # FLUSH privileges;
 
 # galera setting 
 echo 'xhdtlsqhdks1' | sudo -kS systemctl stop mariadb
 
-sudo nano /etc/my.cnf.d/server.cnf
-
+# sudo nano /etc/my.cnf.d/server.cnf
+\cp /home/atcs03/centerservercicd/server1/server.cnf /etc/my.cnf.d/server.cnf
 
 # [server]
 
