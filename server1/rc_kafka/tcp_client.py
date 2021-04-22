@@ -284,7 +284,7 @@ if V_2010[lcid - 1] == 1:     # 2010년식 : 3색 제어기
     thread_alive  = True
     thread.start()
 
-host_memory = sysv_ipc.SharedMemory(0x1000)
+host_memory = sysv_ipc.SharedMemory(0x1000, flags = sysv_ipc.IPC_CREAT, size = 256)
 s_memory    = sysv_ipc.SharedMemory(0x1000 + lcid, flags = sysv_ipc.IPC_CREAT, size = 128)
 
 server_address = (lc_address[lcid - 1], PORT_NUM)
