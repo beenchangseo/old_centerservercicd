@@ -41,6 +41,7 @@ cycle  = 60
 nano_det = [0,0,0,0]
 thread_alive  = False
 opcode = 0
+time_adjust = 0
 
 def hex_dump(msg, buf):
     for value in buf: msg += " %02X" %value
@@ -72,7 +73,7 @@ def nano_client_thread(HOST, PORT):
                 time.sleep(1)
                 continue
 
-            hex_dump("RXD : ", rcvmsg)
+            hex_dump("RXD[n] :", rcvmsg)
             nano_det[0] = rcvmsg[5]
             nano_det[1] = rcvmsg[6]
 
@@ -80,7 +81,7 @@ def nano_client_thread(HOST, PORT):
             sndmsg.append(gen_lrc(sndmsg))
 
             nano_client.send(bytearray(sndmsg))
-            hex_dump("TXD : ", sndmsg)
+            hex_dump("TXD[n] :", sndmsg)
 
         except Exception as e:
             print("NANO Socket connection Error -> ", e)
@@ -119,7 +120,7 @@ def receive_packet(conn):
     return rcvmsg
 
 def make_txmsg(lcid, host_memory):
-    global opcode
+    global opcode, time_adjust
 
     cmd_memory = bytearray(host_memory.read())       # shared memory read (host_command)
 
@@ -153,6 +154,13 @@ def make_txmsg(lcid, host_memory):
         sndmsg[2] = len(sndmsg) - 1
         sndmsg.append(gen_lrc(sndmsg))
         hex_dump("[lcid = %d] control_cmd -->" %lcid, sndmsg)
+    elif time_adjust == 1:
+        t = time.localtime()
+        sndmsg = [0x7e, 0x7e, 4, lcid % 16, 0x40]
+        sndmsg[5:] = [t.tm_year % 100, t.tm_mon, t.tm_mday, t.tm_hour, t.tm_min, t.tm_sec, (t.tm_wday+1) & 0x7]
+        sndmsg[2] = len(sndmsg) - 1
+        sndmsg.append(gen_lrc(sndmsg))
+        time_adjust = 0
     else:
         # sndmsg = [0x7e, 0x7e, 4, lcid % 16, 0x12, 4 ^ (lcid % 16) ^ 0x12,
         #           0x7e, 0x7e, 4, lcid % 16, 0x42, 4 ^ (lcid % 16) ^ 0x42]
@@ -164,7 +172,7 @@ def make_txmsg(lcid, host_memory):
     return sndmsg
 
 def rcvmsg_handler(rcvmsg):
-    global lc_msg, nano_det
+    global lc_msg, nano_det, time_adjust
 
     if rcvmsg[4] == 0x13:                   # LC status
 
@@ -246,6 +254,11 @@ def rcvmsg_handler(rcvmsg):
         lc_msg[6] = rcvmsg[BASE + 6]    # sec
         lc_msg[7] = (lc_msg[7] & 0xf0) + (rcvmsg[BASE + 7] & 0x0f)  # weekday
 
+        t = time.localtime()
+        if abs(t.tm_min*60 + t.tm_sec - lc_msg[5]*60 - lc_msg[6]) > 9:## or abs(t.tm_min - lc_msg[5]) > 1
+            print("time adjust 필요함 ~~~ !!")
+            print("sys = ",t.tm_hour,':', t.tm_min, ':', t.tm_sec, "/ lc = ",lc_msg[4],':', lc_msg[5], ':', lc_msg[6])
+            time_adjust = 1
 
 def publish_message(producer, topic_name, key, value):
     try:
@@ -334,7 +347,7 @@ while True:
 
         client.send(bytearray(sndmsg))
         if lcid == memory[127]: hex_dump("TXD :", sndmsg)
-#        hex_dump("TXD :", sndmsg)
+        hex_dump("TXD :", sndmsg)
 
         time.sleep(SCAN_TIME)
 
@@ -356,7 +369,7 @@ while True:
                 rcvmsg = rcvmsg[length:]
                 continue
 
-#            hex_dump("RXD :", rcvmsg[0 : length])
+            hex_dump("RXD :", rcvmsg[0 : length])
 
             if rcvmsg[4] == 0x41 or rcvmsg[4] >= 0x50:      # clock & startup_code & DATABASE
                 publish_message(kafka_producer, 'control-response', 'CTL_RPS', rcvmsg[3:rcvmsg[2] + 1])
