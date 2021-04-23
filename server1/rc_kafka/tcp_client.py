@@ -255,7 +255,7 @@ def rcvmsg_handler(rcvmsg):
         lc_msg[7] = (lc_msg[7] & 0xf0) + (rcvmsg[BASE + 7] & 0x0f)  # weekday
 
         t = time.localtime()
-        if abs(t.tm_min*60 + t.tm_sec - lc_msg[5]*60 - lc_msg[6]) > 9:## or abs(t.tm_min - lc_msg[5]) > 1
+        if abs(t.tm_min*60 + t.tm_sec - lc_msg[5]*60 - lc_msg[6]) > 5:
             print("time adjust 필요함 ~~~ !!")
             print("sys = ",t.tm_hour,':', t.tm_min, ':', t.tm_sec, "/ lc = ",lc_msg[4],':', lc_msg[5], ':', lc_msg[6])
             time_adjust = 1
