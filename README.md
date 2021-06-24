@@ -19,3 +19,9 @@ nano /etc/ssh/sshd_config
 GSSAPIAuthentication no
 UseDNS no
 systemctl restart sshd
+
+##CRONTAB
+mtp4.py <네트워크 및 장치 상태 모니터링>
+
+##CREATE TCS_DATABASE
+create_tcs_database.sql
