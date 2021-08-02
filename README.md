@@ -2,8 +2,6 @@
 ===========
 
 #수동 설치 필요한 사항
------------
-
 ##PYTHON MODULE ISNTALL (SU)  
 pip3 install --upgrade pip  
 pip3 install kafka-python  
