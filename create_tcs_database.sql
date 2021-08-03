@@ -42,17 +42,13 @@ CREATE TABLE IF NOT EXISTS `center_config` (
 
 -- 내보낼 데이터가 선택되어 있지 않습니다.
 
--- 테이블 tcs_database.console_log 구조 내보내기
-CREATE TABLE IF NOT EXISTS `console_log` (
-  `NO` int(11) NOT NULL AUTO_INCREMENT,
-  `TIME` varchar(50) NOT NULL DEFAULT 'CURRENT_TIMESTAMP',
-  `device` varchar(15) DEFAULT NULL,
-  `id` int(11) DEFAULT NULL,
-  `log` varchar(50) NOT NULL,
-  PRIMARY KEY (`NO`),
-  KEY `id` (`id`),
-  CONSTRAINT `console_log_ibfk_1` FOREIGN KEY (`id`) REFERENCES `local` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+
+-- 테이블 tcs_database.crossNodeApi 구조 내보내기
+CREATE TABLE IF NOT EXISTS `crossNodeApi` (
+  `link_id` int(11) unsigned NOT NULL COMMENT '유니티 도로 링크아이디',
+  `COMMENT` varchar(20) CHARACTER SET utf8mb4 DEFAULT NULL COMMENT '추가설명'
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- 내보낼 데이터가 선택되어 있지 않습니다.
 
@@ -82,7 +78,7 @@ CREATE TABLE IF NOT EXISTS `cycle_log` (
   PRIMARY KEY (`log_no`),
   KEY `id` (`id`),
   CONSTRAINT `cycle_log_ibfk_1` FOREIGN KEY (`id`) REFERENCES `local` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=947559 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=1548915 DEFAULT CHARSET=utf8mb4;
 
 -- 내보낼 데이터가 선택되어 있지 않습니다.
 
@@ -112,7 +108,7 @@ CREATE TABLE IF NOT EXISTS `detect_log` (
   KEY `idx_id_log_time` (`id`,`log_time`),
   KEY `id_2` (`id`,`log_time`),
   CONSTRAINT `detect_log_ibfk_1` FOREIGN KEY (`id`) REFERENCES `local` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=947559 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=1548915 DEFAULT CHARSET=utf8;
 
 -- 내보낼 데이터가 선택되어 있지 않습니다.
 
@@ -178,7 +174,7 @@ CREATE TABLE IF NOT EXISTS `event_log` (
   KEY `device` (`device`),
   CONSTRAINT `event_log_ibfk_1` FOREIGN KEY (`event_code`) REFERENCES `event_code` (`event_code`),
   CONSTRAINT `event_log_ibfk_2` FOREIGN KEY (`device`) REFERENCES `device` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=17532 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=21276 DEFAULT CHARSET=utf8mb4;
 
 -- 내보낼 데이터가 선택되어 있지 않습니다.
 
@@ -221,6 +217,7 @@ CREATE TABLE IF NOT EXISTS `local` (
   `online` varchar(200) DEFAULT NULL,
   `cross_type` int(10) unsigned DEFAULT NULL COMMENT '현시 갯수',
   `detector_count` int(11) NOT NULL DEFAULT 1 COMMENT '검지기 갯수',
+  `prevNode_distance` int(11) NOT NULL DEFAULT 0 COMMENT '전 교차로 와의 거리',
   PRIMARY KEY (`id`),
   KEY `FK_local_group_table` (`group_id`),
   CONSTRAINT `FK_local_group_table` FOREIGN KEY (`group_id`) REFERENCES `group_table` (`group_no`)
@@ -231,8 +228,7 @@ CREATE TABLE IF NOT EXISTS `local` (
 -- 테이블 tcs_database.local_status 구조 내보내기
 CREATE TABLE IF NOT EXISTS `local_status` (
   `id` int(11) NOT NULL,
-  `status` varchar(500) DEFAULT NULL,
-  `control_info` varchar(500) DEFAULT NULL,
+  `status` int(11) unsigned NOT NULL DEFAULT 1,
   KEY `id` (`id`),
   CONSTRAINT `local_status_ibfk_1` FOREIGN KEY (`id`) REFERENCES `local` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
@@ -255,7 +251,7 @@ CREATE TABLE IF NOT EXISTS `network_report` (
   PRIMARY KEY (`no`),
   KEY `id` (`id`),
   CONSTRAINT `network_report_ibfk_1` FOREIGN KEY (`id`) REFERENCES `local` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2110143 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=12528111 DEFAULT CHARSET=utf8mb4;
 
 -- 내보낼 데이터가 선택되어 있지 않습니다.
 
@@ -285,6 +281,9 @@ CREATE TABLE IF NOT EXISTS `traffic` (
   `angle` int(11) NOT NULL,
   `top` int(11) NOT NULL,
   `left` int(11) DEFAULT NULL,
+  `unityX` int(11) NOT NULL COMMENT 'unity x축',
+  `unityY` int(11) NOT NULL COMMENT 'unity y축',
+  `unityZ` int(11) NOT NULL COMMENT 'unity z축',
   KEY `FK_traffic_local` (`id`),
   CONSTRAINT `FK_traffic_local` FOREIGN KEY (`id`) REFERENCES `local` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
