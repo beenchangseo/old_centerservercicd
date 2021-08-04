@@ -131,22 +131,41 @@ def make_txmsg(lcid, host_memory):
         if   sndmsg[4] == 0x40:     # clock download
             t = time.localtime()
             sndmsg[5:] = [t.tm_year % 100, t.tm_mon, t.tm_mday, t.tm_hour, t.tm_min, t.tm_sec, (t.tm_wday+1) & 0x7]
+
         elif sndmsg[4] == 0xA0:     # startup_code down
             sndmsg[5:] = cmd_memory[5:5+25]
+
         elif sndmsg[4] == 0xA2:     # startup_code upload
             pass
+
+        elif sndmsg[4] == 0xA4:     # holi_plan download
+            sndmsg[5:] = cmd_memory[5:5+90]
+
+        elif sndmsg[4] == 0xA6:     # holi_plan upload
+            pass
+
+        elif sndmsg[4] == 0xA8:     # weekplan download
+            sndmsg[5:] = cmd_memory[5:5+7]
+
+        elif sndmsg[4] == 0xAA:     # weekplan upload
+            pass
+
         elif sndmsg[4] == 0xB0:     # dayplan down
-            sndmsg[5:] = 0
             sndmsg[5:] = cmd_memory[5:5+160]
+
         elif sndmsg[4] == 0xB2:     # dayplan upload
-            sndmsg[5:] = 0
+            sndmsg.append(cmd_memory[5])
+
         elif sndmsg[4] == 0xB4:     # fuction table download
             sndmsg[5:] = cmd_memory[5:5+80]
         elif sndmsg[4] == 0xB6:     # fuction table upload
             pass
+
         elif sndmsg[4] == 0xC4:     # detector config download
             sndmsg[5:] = cmd_memory[5:5+224]
         elif sndmsg[4] == 0xC6:     # detector config upload
+            pass
+        else:
             pass
 
         host_memory.write(bytearray(cmd_memory))  # clear server_command
