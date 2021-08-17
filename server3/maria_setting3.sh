@@ -33,7 +33,7 @@ echo 'xhdtlsqhdks1' | sudo -kS systemctl start mariadb
 echo 'xhdtlsqhdks1' | sudo -kS systemctl enable mariadb
 
 
-mysql -uroot -pxhdtlsqhdks1 < create_root_auth.sql
+# mysql -uroot -pxhdtlsqhdks1 < create_root_auth.sql
 
 # <mysql create_root_auth.sql>
 # mysql -u root -p
