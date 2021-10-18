@@ -8,7 +8,7 @@ import threading
 import sys
 import pymysql
 
-DATABASE_SERVERS = '172.16.0.202'
+DATABASE_SERVERS = '192.168.1.182'
 # MySQl connection
 mydb = pymysql.connect(
         host              = DATABASE_SERVERS,
@@ -24,13 +24,10 @@ cursor.execute(get_Ip_sql)
 rows = cursor.fetchall()
 mydb.close()
 
-KAFKA_SERVERS  = '172.16.0.201:9092'
+KAFKA_SERVERS  = '192.168.1.181:9092'
 API_VERSION    = (0, 10, 1)
 
-IP_ADDRESS     = '20.2.13.2'
 PORT_NUM       = 7070
-server_address = (IP_ADDRESS, PORT_NUM)
-
 BUFFER_SIZE    = 1024
 SCAN_TIME      = 1.0
 
@@ -131,40 +128,40 @@ def make_txmsg(lcid, host_memory):
         if   sndmsg[4] == 0x40:     # clock download
             t = time.localtime()
             sndmsg[5:] = [t.tm_year % 100, t.tm_mon, t.tm_mday, t.tm_hour, t.tm_min, t.tm_sec, (t.tm_wday+1) & 0x7]
-
         elif sndmsg[4] == 0xA0:     # startup_code down
             sndmsg[5:] = cmd_memory[5:5+25]
-
         elif sndmsg[4] == 0xA2:     # startup_code upload
             pass
-
         elif sndmsg[4] == 0xA4:     # holi_plan download
             sndmsg[5:] = cmd_memory[5:5+90]
-
         elif sndmsg[4] == 0xA6:     # holi_plan upload
             pass
-
         elif sndmsg[4] == 0xA8:     # weekplan download
             sndmsg[5:] = cmd_memory[5:5+7]
-
         elif sndmsg[4] == 0xAA:     # weekplan upload
             pass
-
         elif sndmsg[4] == 0xB0:     # dayplan down
-            sndmsg[5:] = cmd_memory[5:5+160]
-
+            sndmsg[5:] = cmd_memory[5:5+161]
         elif sndmsg[4] == 0xB2:     # dayplan upload
             sndmsg.append(cmd_memory[5])
-
         elif sndmsg[4] == 0xB4:     # fuction table download
             sndmsg[5:] = cmd_memory[5:5+80]
         elif sndmsg[4] == 0xB6:     # fuction table upload
             pass
-
         elif sndmsg[4] == 0xC4:     # detector config download
             sndmsg[5:] = cmd_memory[5:5+224]
         elif sndmsg[4] == 0xC6:     # detector config upload
             pass
+        elif sndmsg[4] == 0xC0:     # flash-map download
+            sndmsg[5:] = cmd_memory[5:5+17]
+        elif sndmsg[4] == 0xC2:     # flash-map upload
+            pass
+        elif sndmsg[4] == 0xBC:     # signal-map download
+            # signal-map download routine
+            sndmsg[5:] = cmd_memory[5:cmd_memory[6]+8]
+            pass
+        elif sndmsg[4] == 0xBE:     # signal-map upload
+            sndmsg.append(cmd_memory[5])
         else:
             pass
 
@@ -273,11 +270,11 @@ def rcvmsg_handler(rcvmsg):
         lc_msg[6] = rcvmsg[BASE + 6]    # sec
         lc_msg[7] = (lc_msg[7] & 0xf0) + (rcvmsg[BASE + 7] & 0x0f)  # weekday
 
-        t = time.localtime()
-        if abs(t.tm_min*60 + t.tm_sec - lc_msg[5]*60 - lc_msg[6]) > 5:
-            print("time adjust 필요함 ~~~ !!")
-            print("sys = ",t.tm_hour,':', t.tm_min, ':', t.tm_sec, "/ lc = ",lc_msg[4],':', lc_msg[5], ':', lc_msg[6])
-            time_adjust = 1
+        # t = time.localtime()
+        # if abs(t.tm_min*60 + t.tm_sec - lc_msg[5]*60 - lc_msg[6]) > 5:
+        #     print("time adjust 필요함 ~~~ !!")
+        #     print("sys = ",t.tm_hour,':', t.tm_min, ':', t.tm_sec, "/ lc = ",lc_msg[4],':', lc_msg[5], ':', lc_msg[6])
+        #     time_adjust = 1
 
 def publish_message(producer, topic_name, key, value):
     try:
@@ -295,15 +292,6 @@ if len(sys.argv) >= 3: debug = 1
 else:                  debug = 0
 
 print("L/C Communication Server Start [ver. 2020.2.28]")
-
-# lc_address = ['10.2.0.11','10.2.0.12','10.2.0.13','10.2.0.14','10.2.0.15',
-#               '10.2.0.16','10.2.0.17','10.2.0.18','10.2.0.19','10.2.0.20',
-#               '10.2.0.21','10.2.0.22','10.2.0.23','10.2.0.24','10.2.0.25',
-#               '10.2.0.26','10.2.0.27','10.2.0.28','10.2.0.29','10.2.0.30',
-#               '10.2.0.31','10.2.0.32','10.2.0.33','10.2.0.34','10.2.0.35',
-#               '10.2.0.36','10.2.0.37','10.2.0.38','20.2.10.2','20.2.11.2',
-#               '20.2.12.2','20.2.13.2','20.2.14.2','20.2.15.2','20.2.16.2',
-#               '20.2.17.2','20.2.18.2','20.2.19.2']
 
 lc_address = []
 V_2010     = []
