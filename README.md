@@ -11,7 +11,8 @@ pip3 install pymysql
 pip3 install openpyxl  
 pip3 install sysv-ipc  
 pip3 install aiohttp  
-  
+pip3 install requests
+
 ##SELINUX DISABLED (SU)  
 selinux state : sestatus  
 nano /etc/selinux/config   ##SELINUX=disabled  
