@@ -80,7 +80,7 @@ if __name__ == "__main__":
     consumer = KafkaConsumer(
             bootstrap_servers = KAFKA_SERVERS,
             auto_offset_reset = 'latest',
-            group_id          = 'consumer05',
+            group_id          = 'rc_consumer',
             api_version       = API_VERSION)
     consumer.subscribe('control-kafka')
     print("Kafka Consumer Thread Connected ")
