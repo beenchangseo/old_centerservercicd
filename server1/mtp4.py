@@ -21,7 +21,7 @@ from kafka import KafkaConsumer
 
 
 # MySQl connection
-DATABASE_SERVERS = '172.16.0.202'
+DATABASE_SERVERS = '172.16.0.102'
 REPORT_ARRAY_DATA = []
 mydb = pymysql.connect(
         host              = DATABASE_SERVERS,
@@ -42,7 +42,7 @@ def kafka_consumer(ip):
                 bootstrap_servers = ip,
                 auto_offset_reset = 'latest',
                 enable_auto_commit = True,
-                consumer_timeout_ms=10000,
+                consumer_timeout_ms=5000,
                 api_version=(0, 10, 1))
     consumer.subscribe(['log'])
     for msg in consumer :
@@ -52,35 +52,38 @@ def kafka_consumer(ip):
     consumer.close(autocommit=False)
     return buf
 
-def detect_condition_consumer(ip):
-    buf = [-1, -1, -1, -1]
-    ips = ip.split("'")[1]+':9092'
-    # Kafka consumer
-    consumer = KafkaConsumer(
-                bootstrap_servers = ips,
-                auto_offset_reset = 'latest',
-                enable_auto_commit = False,
-                consumer_timeout_ms=6000,
-                api_version=(0, 10, 1))
-    consumer.subscribe(['log'])
-    for msg in consumer :
-        # print(msg)
-        jsonData = json.loads(msg.value)
-        buf = jsonData['log']
-        # print(buf)
-        break
-    consumer.close(autocommit=False)
-    return buf
+# def detect_condition_consumer(ip):
+#     buf = [-1, -1, -1, -1]
+#     ips = ip.split("'")[1]+':9092'
+#     # Kafka consumer
+#     consumer = KafkaConsumer(
+#                 bootstrap_servers = ips,
+#                 auto_offset_reset = 'latest',
+#                 enable_auto_commit = False,
+#                 consumer_timeout_ms=6000,
+#                 api_version=(0, 10, 1))
+#     consumer.subscribe(['log'])
+#     for msg in consumer :
+#         # print(msg)
+#         jsonData = json.loads(msg.value)
+#         buf = jsonData['log']
+#         # print(buf)
+#         break
+#     consumer.close(autocommit=False)
+#     return buf
 
 def send_Mail(report_Mail_Data):
   sndmsg = ''
   for i in range(len(report_Mail_Data)):
     sndmsg += report_Mail_Data[i]
+  
+
   id = 'dbict0701' 
   password = 'dongbu9197**' 
   sendEmail = 'dbict0701@naver.com'
-  destination = ['seochangbin_1@naver.com','iamthemarine@naver.com','gammr@naver.com']
-  subject = '완주군청 교차로 네트워크 현황 리포트' 
+  # destination = ['seochangbin_1@naver.com','iamthemarine@naver.com','gammr@naver.com']
+  destination = ['seochangbin_1@naver.com','okfine1000@naver.com','gammr@naver.com']
+  subject = '장흥군 교차로 네트워크 현황 리포트' 
   text = sndmsg 
   addrs = destination  # send mail list 
 
@@ -106,11 +109,11 @@ def send_Mail(report_Mail_Data):
 def network_report_watchdog(cursor):
   report_Mail_Data = []
 
-  report_CheckTime_start = "07:59:00"
+  report_CheckTime_start = "09:00:00"
   report_CheckTime_start = datetime.datetime.strptime(report_CheckTime_start, "%H:%M:%S")
   report_CheckTime_start = now.replace(hour=report_CheckTime_start.time().hour, minute=report_CheckTime_start.time().minute, second=report_CheckTime_start.time().second, microsecond=0)
 
-  report_CheckTime_end = "08:05:00"
+  report_CheckTime_end = "09:01:00"
   report_CheckTime_end = datetime.datetime.strptime(report_CheckTime_end, "%H:%M:%S")
   report_CheckTime_end = now.replace(hour=report_CheckTime_end.time().hour, minute=report_CheckTime_end.time().minute, second=report_CheckTime_end.time().second, microsecond=0)
 
@@ -132,7 +135,7 @@ def network_report_watchdog(cursor):
               where A.id=%s AND A.device_num=%s AND A.ip='%s' AND A.id = B.id""" %(result[rows][0],result[rows][1],result[rows][2])
       cursor.execute(querry)
       log_time_AND_online = cursor.fetchall() ## 모니터링 할 데이터 (시간 , 온라인 상태)
-      if log_time_AND_online[0][1] == 'OFF': ## 온라인 상태
+      if log_time_AND_online[0][1] == 0: ## 온라인 상태
         diff =  now-datetime.datetime.strptime(str(log_time_AND_online[0][0]), "%Y-%m-%d %H:%M:%S")
         # if (diff.seconds / 3600) > 1:
         if True:
@@ -142,7 +145,8 @@ def network_report_watchdog(cursor):
           # print(log_time_AND_online[0][2],'번 교차로 ', log_time_AND_online[0][3],'1시간 이상 연결 끊김')
           print("연결 장애 시간 : ",str(diff).split('.')[0])
           report_Mail_Data.append(str(log_time_AND_online[0][2])+'번 '+ str(log_time_AND_online[0][3])+' 교차로  <'+str(log_time_AND_online[0][4])+'> : 1시간 이상 연결 끊김\n'+"연결 장애 시간 : "+ diff +'\n\n\n')
-          send_Mail(report_Mail_Data)
+    # print(report_Mail_Data)
+    send_Mail(report_Mail_Data)
 
 
 def put_network_report_console(cursor, log_time, id, ip, device, device_num, online, ps_run, can_sts, lmb_sts, det_mode):
@@ -285,7 +289,7 @@ def thread_pinger(i, q):
       device_ip = (data[2].split('.')[-1])[0:-1] ## DeviceIP
       
       data.extend([-1,-1,-1,-1])   ## PING 떨어져 있으면 KAFKA DATA -1로 리턴
-      print(data)
+      # print(data)
 
       REPORT_ARRAY_DATA.append(data)
     ##신호 정상일 때
@@ -293,12 +297,12 @@ def thread_pinger(i, q):
       m = re.match('(\w{1,3})\.(\w{1,3})\.(\w{1,3})\.(\w{1,3})', str(ip))
       data = product_list(int(m.group(3)), int(m.group(4)), str(ip),True, nowDatetime)
       device_ip = (data[2].split('.')[-1])[0:-1] ## DeviceIP
-      if device_ip == '3' or device_ip == '5' or device_ip == '7' or device_ip == '9':
+      if (device_ip == '3' or device_ip == '5' or device_ip == '7' or device_ip == '9') and len(kafka_consumer(ip)) == 4:
         data.extend(kafka_consumer(ip))
       else:
         data.extend([-1,-1,-1,-1])
       
-      print(data)
+      # print(data)
       
       REPORT_ARRAY_DATA.append(data)
     q.task_done()
@@ -328,6 +332,7 @@ while True:
 
 # print(REPORT_ARRAY_DATA)
 for count in range(len(REPORT_ARRAY_DATA)):
+  print(REPORT_ARRAY_DATA[count])
   log_time    = REPORT_ARRAY_DATA[count][0]
   id          = REPORT_ARRAY_DATA[count][1]
   ip          = REPORT_ARRAY_DATA[count][2]
@@ -342,7 +347,7 @@ for count in range(len(REPORT_ARRAY_DATA)):
   put_network_report(cursor, log_time, id, ip, device, device_num, online, PS_RUN, CAN_STS, LMB_STS, DET_MODE)
   put_network_report_console(cursor, log_time, id, ip, device, device_num, online, PS_RUN, CAN_STS, LMB_STS, DET_MODE)
   
-# network_report_watchdog(cursor)
+network_report_watchdog(cursor)
 
 mydb.commit()
 mydb.close()
