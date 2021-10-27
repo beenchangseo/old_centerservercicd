@@ -12,6 +12,7 @@ pip3 install openpyxl
 pip3 install sysv-ipc  
 pip3 install aiohttp  
 pip3 install requests
+pip3 install python-dotenv
 
 ##SELINUX DISABLED (SU)  
 selinux state : sestatus  
