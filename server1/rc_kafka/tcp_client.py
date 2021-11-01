@@ -379,6 +379,7 @@ while True:
             hex_dump("RXD :", rcvmsg[0 : length])
 
             if rcvmsg[4] == 0x41 or rcvmsg[4] >= 0x50:      # clock & startup_code & DATABASE
+                if rcvmsg[3] != lcid: rcvmsg[3] = lcid      # 업로드 LCID 값이 다르게 올라오면 제어기 번호 강제 수정
                 publish_message(kafka_producer, 'control-response', 'CTL_RPS', rcvmsg[3:rcvmsg[2] + 1])
                 hex_dump("[lcid = %d] control_rps -->" %lcid, rcvmsg[:rcvmsg[2] + 2])
             else:
