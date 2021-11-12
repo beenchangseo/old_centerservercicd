@@ -127,6 +127,7 @@ var mariadb_data = `[server]
 wsrep_on=ON
 wsrep_provider=/usr/lib64/galera-4/libgalera_smm.so
 wsrep_cluster_address=gcomm://${server1_ip},${server2_ip},${server3_ip}
+wsrep_auto_increment_control=off
 binlog_format=row
 default_storage_engine=InnoDB
 innodb_autoinc_lock_mode=2
