@@ -270,11 +270,11 @@ def rcvmsg_handler(rcvmsg):
         lc_msg[6] = rcvmsg[BASE + 6]    # sec
         lc_msg[7] = (lc_msg[7] & 0xf0) + (rcvmsg[BASE + 7] & 0x0f)  # weekday
 
-        # t = time.localtime()
-        # if abs(t.tm_min*60 + t.tm_sec - lc_msg[5]*60 - lc_msg[6]) > 5:
-        #     print("time adjust 필요함 ~~~ !!")
-        #     print("sys = ",t.tm_hour,':', t.tm_min, ':', t.tm_sec, "/ lc = ",lc_msg[4],':', lc_msg[5], ':', lc_msg[6])
-        #     time_adjust = 1
+        t = time.localtime()
+        if abs(t.tm_min*60 + t.tm_sec - lc_msg[5]*60 - lc_msg[6]) > 5:
+            print("time adjust 필요함 ~~~ !!")
+            print("sys = ",t.tm_hour,':', t.tm_min, ':', t.tm_sec, "/ lc = ",lc_msg[4],':', lc_msg[5], ':', lc_msg[6])
+            time_adjust = 1
 
 def publish_message(producer, topic_name, key, value):
     try:
@@ -378,7 +378,8 @@ while True:
 
             hex_dump("RXD :", rcvmsg[0 : length])
 
-            if rcvmsg[4] == 0x41 or rcvmsg[4] >= 0x50:      # clock & startup_code & DATABASE
+            # if rcvmsg[4] == 0x41 or rcvmsg[4] >= 0x50:      # clock & startup_code & DATABASE
+            if rcvmsg[4] >= 0x50:      # clock & startup_code & DATABASE
                 if rcvmsg[3] != lcid: rcvmsg[3] = lcid      # 업로드 LCID 값이 다르게 올라오면 제어기 번호 강제 수정
                 publish_message(kafka_producer, 'control-response', 'CTL_RPS', rcvmsg[3:rcvmsg[2] + 1])
                 hex_dump("[lcid = %d] control_rps -->" %lcid, rcvmsg[:rcvmsg[2] + 2])
