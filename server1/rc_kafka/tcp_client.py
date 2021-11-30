@@ -189,7 +189,7 @@ def make_txmsg(lcid, host_memory):
 
 def rcvmsg_handler(rcvmsg):
     global lc_msg, nano_det, time_adjust
-
+    lc_msg[61] = 0 ## 21.11.30. 추가 코드 (KAFAK 61번째 데이터 => 오피코드 추가)
     if rcvmsg[4] == 0x13:                   # LC status
 
         if rcvmsg[2] < 29 or rcvmsg[2] == 32:       # 4색 제어기 ?
@@ -253,6 +253,7 @@ def rcvmsg_handler(rcvmsg):
         lc_msg[35:35+8] = rcvmsg[5+64:5+64+8]   # occ 1-8
 
         lc_msg[60] = (lc_msg[60] + 1) & 0x7f   # split upload
+        lc_msg[61] = rcvmsg[4] ## 21.11.30. 추가 코드 (KAFAK 61번째 데이터 => 오피코드 추가)
 
     elif rcvmsg[4] == 0x33:             # split
         lc_msg[43 : 43+8] = rcvmsg[5 : 5+8]     # vehicle split
