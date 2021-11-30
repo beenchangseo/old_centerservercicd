@@ -35,40 +35,43 @@ def put_cycle_log(cursor, lcbuf):
 
     lcid = lcbuf[0] - 1
 
-    if report_cycle[lcid] == lcbuf[60]: return
-    report_cycle[lcid] = lcbuf[60]
+    ## 21.11.30 코드 수정 ##
+    # if report_cycle[lcid] == lcbuf[60]: return
+    # report_cycle[lcid] = lcbuf[60]                
 
-    log_time = "'20%02d-%02d-%02d %02d:%02d:%02d'" %(lcbuf[1], lcbuf[2], lcbuf[3], lcbuf[4], lcbuf[5], lcbuf[6])
-    cycle    = lcbuf[19]
-    offset   = lcbuf[21]
-    split    = lcbuf[43:43+16]      # split 1-8, ped_time 1-8
+    ## 21.11.30 코드 수정 ##
+    if lcbuf[61] == 0x23 : 
+        log_time = "'20%02d-%02d-%02d %02d:%02d:%02d'" %(lcbuf[1], lcbuf[2], lcbuf[3], lcbuf[4], lcbuf[5], lcbuf[6])
+        cycle    = lcbuf[19]
+        offset   = lcbuf[21]
+        split    = lcbuf[43:43+16]      # split 1-8, ped_time 1-8
 
-    vol      = lcbuf[27:27+8]
-    occ      = lcbuf[35:35+8]
+        vol      = lcbuf[27:27+8]
+        occ      = lcbuf[35:35+8]
 
-    if cycle == 0: return
+        if cycle == 0: return
 
-    print("PC-mysql : cycle_log  [id = %d]" %(lcid + 1), log_time, cycle, offset, split[0:8], split[8:16])
-    print("PC-mysql : detect_log [id = %d]" %(lcid + 1), log_time, vol, occ)
+        print("PC-mysql : cycle_log  [id = %d]" %(lcid + 1), log_time, cycle, offset, split[0:8], split[8:16])
+        print("PC-mysql : detect_log [id = %d]" %(lcid + 1), log_time, vol, occ)
 
-    try:
-        querry = """INSERT INTO cycle_log(log_time, id, cycle, offset, split_1, split_2, split_3, split_4, split_5, split_6, split_7, split_8,
-                ped_1, ped_2, ped_3, ped_4, ped_5, ped_6, ped_7, ped_8)
-                VALUES(%s, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d)""" %(log_time, lcid + 1, cycle, offset,
-                split[0], split[1], split[2],   split[3],  split[4],  split[5],  split[6],  split[7],
-                split[8], split[9], split[10], split[11], split[12], split[13], split[14], split[15])
-        cursor.execute(querry)
+        try:
+            querry = """INSERT INTO cycle_log(log_time, id, cycle, offset, split_1, split_2, split_3, split_4, split_5, split_6, split_7, split_8,
+                    ped_1, ped_2, ped_3, ped_4, ped_5, ped_6, ped_7, ped_8)
+                    VALUES(%s, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d)""" %(log_time, lcid + 1, cycle, offset,
+                    split[0], split[1], split[2],   split[3],  split[4],  split[5],  split[6],  split[7],
+                    split[8], split[9], split[10], split[11], split[12], split[13], split[14], split[15])
+            cursor.execute(querry)
 
-        querry = """INSERT INTO detect_log(log_time, id, vol_1, occ_1, vol_2, occ_2, vol_3, occ_3, vol_4, occ_4,
-                vol_5, occ_5, vol_6, occ_6, vol_7, occ_7, vol_8, occ_8)
-                VALUES(%s, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d)""" %(log_time, lcid + 1,
-                vol[0], occ[0], vol[1], occ[1], vol[2], occ[2], vol[3], occ[3],
-                vol[4], occ[4], vol[5], occ[5], vol[6], occ[6], vol[7], occ[7])
-        cursor.execute(querry)
+            querry = """INSERT INTO detect_log(log_time, id, vol_1, occ_1, vol_2, occ_2, vol_3, occ_3, vol_4, occ_4,
+                    vol_5, occ_5, vol_6, occ_6, vol_7, occ_7, vol_8, occ_8)
+                    VALUES(%s, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d)""" %(log_time, lcid + 1,
+                    vol[0], occ[0], vol[1], occ[1], vol[2], occ[2], vol[3], occ[3],
+                    vol[4], occ[4], vol[5], occ[5], vol[6], occ[6], vol[7], occ[7])
+            cursor.execute(querry)
 
-    except Exception as e:
-        print('Exception in putting cycle_log')
-        print(e)
+        except Exception as e:
+            print('Exception in putting cycle_log')
+            print(e)
 
 def publish_message(producer, topic_name, key, value):
     try:
