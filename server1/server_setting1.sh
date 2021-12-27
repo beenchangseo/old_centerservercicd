@@ -15,7 +15,7 @@ echo 'xhdtlsqhdks1' | sudo -kS make install
 
 # nodejs 12.x version install #
 cd ~
-echo 'xhdtlsqhdks1' | sudo -kS curl -sL https://rpm.nodesource.com/setup_12.x
+echo 'xhdtlsqhdks1' | sudo -kS curl -fsSL https://rpm.nodesource.com/setup_lts.x
 echo 'xhdtlsqhdks1' | sudo -kSE bash -
 echo 'xhdtlsqhdks1' | sudo -kS yum -y install nodejs
 
