@@ -70,7 +70,7 @@ zookeeper.connect=${server1_ip}:2181,${server2_ip}:2181,${server3_ip}:2181
 zookeeper.connection.timeout.ms=6000
 group.initial.rebalance.delay.ms=0
 delete.topic.enable=true
-auto.create.topics.enable=true
+auto.create.topics.enable=false
 auto.leader.rebalance.enable=true
 `;
 fs.writeFile(url+server_properties_fileName,server_properties_data,server_properties_encoding,function(err){
