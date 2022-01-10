@@ -4,7 +4,7 @@
 #수동 설치 필요한 사항  
 -----------
 ##PYTHON MODULE ISNTALL (SU)  
-aiohttp==3.8.1
+aiohttp==3.7.4.post0
 aiosignal==1.2.0
 async-timeout==4.0.1
 attrs==21.2.0
