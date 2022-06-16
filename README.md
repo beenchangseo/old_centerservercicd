@@ -2,7 +2,7 @@
 ---
 
 # 수동 설치 필요한 사항  
----
+-
 ## PYTHON MODULE ISNTALL (SU)  
 aiohttp==3.7.4.post0\
 aiosignal==1.2.0\
